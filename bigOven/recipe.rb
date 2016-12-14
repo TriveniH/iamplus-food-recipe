@@ -11,7 +11,8 @@ class RECIPE
 	def get_recipe(recipeName, incl, excl)
 		recipe_url = ROUTE + TITLE + recipeName + "&"
 		delimeter = "rpp=10&pg=1&api_key="
-		url = recipe_url + delimeter + ENV['BIGOVEN_API_KEY']
+		finalParamString = getIncExcl(incl,excl)
+		url = recipe_url + finalParamString+delimeter + ENV['BIGOVEN_API_KEY']
 		puts "URL = "+url
 		#response = make_api_request_for_recipeId url
 		recipeId = make_api_request_for_recipeId url
@@ -62,4 +63,32 @@ class RECIPE
 		jsonUtils.generate_response_json
 	end
 
+	def getIncExcl(incl,excl)
+		inclString = ""
+		len = incl.length
+		index = 0
+		incl.each do |inclEach|
+			inclString = inclString+ inclEach
+			if index < len - 1
+				inclString = inclString +","
+			end
+			index +=1
+		end
+
+		exclString = ""
+		len = excl.length
+		index = 0
+		excl.each do |exclEach|
+			exclString = exclString + exclEach
+			if index < len - 1
+				exclString = exclString +","
+			end
+			index +=1
+		end
+		finalString = ""
+		if inclString.length>0
+		finalString = "include_ing="+inclString +"&"	
+		end
+		finalString = finalString +"exclude_ing="+exclString + "&"
+	end
 end

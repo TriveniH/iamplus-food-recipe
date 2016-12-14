@@ -27,12 +27,14 @@ class FoodRecipe
 	 			if secondSplitElements.length >0
 	 				secondSplitElements.each do |secondSplitElement|
 	 					temp = secondSplitElement.squish
-	 					temp = temp.force_encoding "utf-8"
+	 					temp.force_encoding "utf-8"
+	 					temp.encode("utf-8", :invalid => :replace)
 	 					finalList1 << temp
 	 				end
 	 			else
  					temp = element.squish
-					temp = temp.force_encoding "utf-8"
+					temp.force_encoding "utf-8"
+					temp.encode("utf-8", :invalid => :replace)
 	 				finalList1 << temp
 	 			end
 	 		end
