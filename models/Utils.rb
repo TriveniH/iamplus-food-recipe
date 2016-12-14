@@ -35,7 +35,7 @@ module Utils
 		cuisine = parsedJson["Cuisine"]
 		starRating = parsedJson["StarRating"]
 		imageURL = parsedJson["ImageURL"]
-		create_card_object(title, cuisine, "starRating:"+starRating.to_s , imageURL)
+		create_card_object(title, "Cuisine: "+cuisine, "StarRating: "+starRating.to_s , imageURL)
 		
 	end
 
