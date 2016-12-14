@@ -8,7 +8,7 @@ class RECIPE
 	def initialize
 	end
 
-	def get_recipe(recipeName)
+	def get_recipe(recipeName, incl, excl)
 		recipe_url = ROUTE + TITLE + recipeName + "&"
 		delimeter = "rpp=10&pg=1&api_key="
 		url = recipe_url + delimeter + ENV['BIGOVEN_API_KEY']

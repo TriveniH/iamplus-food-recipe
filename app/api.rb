@@ -30,10 +30,19 @@ def get_params
 	  entityFields = Hash.new
   	ps = @params[ :nlu_response ][ :mentions ].map do | h |
 
-    	entity = h[:entity]
+=begin
+	entity = h[:entity]
     	if entity != nil
-      		entityFields[:recipe_name] = entity[:recipe_name]
+          recipeName = entity[:recipe_name]
+          if recipeName != nil
+      		  entityFields[:recipe_name] = entity[:recipe_name]
+          end
     	end
+=end
+
+      key = h[:field_id]
+      value = h[:value]
+      entityFields[key] = value
 	end
 	 entityFields[:user_id] = @params[:iAmPlusId]
 	 puts "entityFields: "+ entityFields.to_s
