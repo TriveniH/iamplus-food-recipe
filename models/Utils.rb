@@ -3,100 +3,48 @@ require 'securerandom'
 
 module Utils
 
+	def Utils.get_highest_rated_recipes(response)
+		#puts "response::"+ response.to_s
+		parsedJson = JSON.parse(response)
+		resultCount = parsedJson["ResultCount"]
+		results = parsedJson["Results"]
+		recipeId = nil
+		title = nil 
+		
+		starRating = nil 
+		higest_rated = 0
+		
+	      results.each do | result |	   
+	      	starRating = result["StarRating"]
+	      	
+	      	if starRating >= higest_rated
+	      		higest_rated = starRating
+	      		recipeId = result["RecipeID"]
+	      		title = result["Title"]
+	      	end
 
-    def Utils.get_api_key_signature_string(api_key, secret, eventId)
-		apiKey = "api_key="+ api_key
-		sig_string = "&sig="+ Utils.generateSignature(api_key, secret, eventId)
-		return apiKey+sig_string
+	      end
+	      recipeId
 	end
 
-    def Utils.generateSignature(api_key, secret, eventId)
-    	if eventId == nil
-    		eventId=""
-    	end
-    	if @mutex == nil
-    		@mutex = Mutex.new
-    	end
-    	@mutex.synchronize {
-    		# access shared resource
-    		timeFromEpoch = Time.now.to_i
-    		timeFromEpoch = timeFromEpoch
-			@timeFromEpochString = timeFromEpoch.to_s
-			puts "timestamp:"+ @timeFromEpochString + " for eventId::"+ eventId.to_s
-  		}
-
-		data = api_key + secret + @timeFromEpochString
-		sig = Digest::SHA256.hexdigest data
-
-		return sig
-    end
-
-	def Utils.is_blank? str
-    	str.to_s.strip == ''
-  	end
-
-  	def Utils.is_present? str
-    	! is_blank?( str )
-  	end
-   
-   	def Utils.check_response_status response
-		puts response.code
-		stat_status = nil
-		case response.code
-		when 200
-			puts "all good"
-			return nil
-		when 403
-			puts "forbidden"
-			stat_status = {stat_error_code: 403,
-					stat_message: "not authorized"}
-		when 404
-			puts "data not found"
-			stat_status = {stat_error_code: 404,
-							stat_message: "Data not found"}
-		else
-			stat_status = {stat_error_code: response.code,
-							stat_message: "Couldn't fetch data"}
-			puts "something went wrong"
-			return nil
-		end
-		content = {paragraphs: ["Data not found"]}
-		{
-			status: response.code,
-			stat_status: stat_status,
-			timeTaken: nil,
-			date: nil,
-			dateType: nil,
-			eventId: nil,
-			imageUrl: nil,
-			headline: nil,
-			content: content
-		}
+	def Utils.parse_recipeId_for_response(response)
+		#puts "response::"+ response.to_s
+		parsedJson = JSON.parse(response)
+		resultCount = parsedJson["ResultCount"]
+		title = parsedJson["Title"]
+		cuisine = parsedJson["Cuisine"]
+		starRating = parsedJson["StarRating"]
+		imageURL = parsedJson["ImageURL"]
+		create_card_object(title, cuisine, "starRating:"+starRating.to_s , imageURL)
+		
 	end
 
-	def Utils.check_for_forbidden_error error_response
-		puts error_response.to_s
-		#parsedResponse = JSON.parse(error_response)
-		status = error_response[:status]
-
-		puts status.to_s
-		if status == 403
-			puts "forbidden"
-			return true
-		end
-		return false
-	end
-
-	def Utils.check_for_data_not_found_error error_response
- 		puts error_response.to_s
- 		#parsedResponse = JSON.parse(error_response)
- 		status = error_response[:status]
- 
- 		puts status.to_s
- 		if status == 404
- 			puts "Data not found"
- 			return true
- 		end
- 		return false
- 	end
+	def Utils.create_card_object(title, subTitle1, subtitle2, imageURL)
+        card_object = Card.new
+        card_object.set_skillProcessTime 0.44
+        card_object.set_cardSpeakOut title
+        card_object.set_card_titles(title, subTitle1, subtitle2)
+        card_object.set_imageUrl imageURL
+        return card_object
+    end    
 end

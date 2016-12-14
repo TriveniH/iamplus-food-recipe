@@ -10,7 +10,7 @@ class RECIPE
 
 	def get_recipe(recipeName)
 		recipe_url = ROUTE + TITLE + recipeName + "&"
-		delimeter = "rpp=1&pg=1&api_key="
+		delimeter = "rpp=10&pg=1&api_key="
 		url = recipe_url + delimeter + ENV['BIGOVEN_API_KEY']
 		puts "URL = "+url
 		#response = make_api_request_for_recipeId url
@@ -30,7 +30,7 @@ class RECIPE
 			response = request.for( :get, url, '')
 			#response_back = JsonUtils.process_response_for_recipes(response.body)
 			puts "response = "+response.to_s
-			recipeId = JsonUtils.get_highest_rated_recipes(response.body)
+			recipeId = Utils.get_highest_rated_recipes(response.body)
 			puts "recipeId === "+recipeId.to_s
 		end
 		puts "api_request_time for recipeId = "+api_request_time.to_s
@@ -45,9 +45,21 @@ class RECIPE
 			response = request.for( :get, url, '')
 			#response_back = JsonUtils.process_response_for_recipes(response.body)
 			puts "response = "+response.to_s
-			
+
 		end
 		puts "api_request_time for detailed recipe = "+api_request_time.to_s
-		response
+		generate_response response.body		
 	end
+
+	def generate_response response
+		card_data_list = []
+		card_data = Utils.parse_recipeId_for_response response
+		card_data_list << card_data
+		jsonUtils = JsonUtils.new
+		jsonUtils.set_introSpeakOut "Here is the recipe"
+		jsonUtils.set_status "SUCCESS"
+		jsonUtils.set_cardList card_data_list
+		jsonUtils.generate_response_json
+	end
+
 end

@@ -1,27 +1,71 @@
-module JsonUtils
+class JsonUtils
+	FORMAT_VERSION 	= "1"
+	FORMAT 			= "default"
+	attr_accessor	:introSpeakOut,
+				  	:cardList,
+				  	:status,
+        			:action,
+            		:autoScroll_needed
 
-	def JsonUtils.get_highest_rated_recipes(response)
-		#puts "response::"+ response.to_s
-		parsedJson = JSON.parse(response)
-		resultCount = parsedJson["ResultCount"]
-		results = parsedJson["Results"]
-		recipeId = nil
-		title = nil 
-		
-		starRating = nil 
-		higest_rated = 0
+	def set_introSpeakOut speakOut
+		@introSpeakOut = speakOut
+	end
 
-	      results.each do | result |	   
-	      	starRating = result["StarRating"]
-	      	
-	      	if starRating >= higest_rated
-	      		higest_rated = starRating
-	      		recipeId = result["RecipeID"]
-	      		title = result["Title"]
-	      	end
+	def set_cardList cardList
+		@cardList = cardList
+   		#check_if_auto_scroll_needed
+	end
 
-	      end
-	      recipeId
+	def set_status status
+		@status = status
+	end
+
+    def set_action action
+   		 @action = action
+    end
+
+    def get_card_data
+      cardToken = {stockId:"123"}
+      puts "cardData"
+      cardsData1 = cardList.map do |card|
+      {name:"FirstCard",
+        id:"333-333-333",
+        cardToken:"{stockId:123}",
+        speakOut:card.cardSpeakOut,
+        speakOutLong:card.cardSpeakOut,
+        showSpeech:card.cardSpeakOut,
+        showSpeechLong:card.cardSpeakOut,
+        imageUrl:card.imageUrl,
+        backgroundImageUrl:card.imageUrl,
+        webviewUrl:card.imageUrl,
+        richMediaUrl:"",
+        actionButtons:[],
+        extraData: card.extraData,
+        title:card.cardTitle,
+        subtitle1:card.subTitle1,
+        subtitle2:card.subTitle2,
+        desc:card.cardTitle,
+        longDesc:card.cardTitle,
+        bgColor:"black",
+        location:{ }
+        }
+      end
+    end
+
+    def generate_response_json
+		result = {
+        "intentToken": "this can be used as a field for global memory",
+        "introSpeakOut": introSpeakOut,
+        "autoListen": true,
+        "autoExpandFirstCard": true,
+        "cardsData": get_card_data
+      }
+      json = { 
+          "format": @FORMAT,  
+          "formatVersion": @FORMAT_VERSION,
+          "status": status ? "FAILED" : "SUCCESS",
+          "result": result
+      }
 	end
 
 end
