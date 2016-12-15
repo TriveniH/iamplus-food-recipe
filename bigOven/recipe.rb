@@ -1,15 +1,15 @@
 class RECIPE
 	DOMAIN = "http://api2.bigoven.com/"
-	ROUTE = "recipes"
+	ROUTE = "recipes?"
 	ROUTE2 = "recipe"
-	TITLE = "?title_kw="
+	TITLE = "title_kw="
 
 
 	def initialize
 	end
 
 	def get_recipe(recipeName, incl, excl)
-		recipe_url = ROUTE + TITLE + recipeName + "&"
+		recipe_url = ROUTE + getTitleUrlString(recipeName)
 		delimeter = "rpp=10&pg=1&api_key="
 		finalParamString = getIncExcl(incl,excl)
 		url = recipe_url + finalParamString+delimeter + ENV['BIGOVEN_API_KEY']
@@ -87,8 +87,18 @@ class RECIPE
 		end
 		finalString = ""
 		if inclString.length>0
-		finalString = "include_ing="+inclString +"&"	
+		finalString = "include_ing="+inclString +"&"
 		end
-		finalString = finalString +"exclude_ing="+exclString + "&"
+		if exclString.length>0
+		finalString = finalString +"exclude_ing="+exclString +"&"	
+		end
+		finalString
+	end
+
+	def getTitleUrlString(recipeName)
+		if recipeName == nil || recipeName.length == 0
+			return ""
+		end
+		TITLE + recipeName + "&"	
 	end
 end
