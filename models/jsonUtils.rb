@@ -65,6 +65,10 @@ class JsonUtils
         "introSpeakOut": introSpeakOut,
         "autoListen": true,
         "autoExpandFirstCard": true,
+        "autoRoll": true,
+        "autoRollCardsCount":7,
+        "autoRollMinWaitInSeconds": 2,
+        "autoRollPauseSentence": "For the next cards please say next",
         "cardsData": get_card_data,
         "extraData":extraData,
       }

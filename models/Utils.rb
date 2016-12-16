@@ -86,11 +86,18 @@ module Utils
 
     def Utils.generate_instruction_card(instructions, imageURL)
     	cards = []
+    	index = 0
     	instructions.each_line{ |s|
     		s = s.chop
     		if s.to_s.strip.length > 0
 				p s
-				cards << create_card_object("Here's how you make it", s, nil, nil, nil ,imageURL, nil, nil)
+				cardSpeakOut = s
+				if index == 0
+					cardSpeakOut = "Here's how you make it. "
+					cardSpeakOut =  cardSpeakOut + s
+				end
+				index = 1
+				cards << create_card_object(cardSpeakOut, s, nil, nil, nil ,imageURL, nil, nil)
 			end
     	}
     	cards
