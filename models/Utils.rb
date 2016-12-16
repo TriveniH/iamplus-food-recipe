@@ -35,16 +35,46 @@ module Utils
 		cuisine = parsedJson["Cuisine"]
 		starRating = parsedJson["StarRating"]
 		imageURL = parsedJson["ImageURL"]
-		create_card_object(title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , imageURL)
 		
+
+		 ingredients = parsedJson["Ingredients"]
+		 ingredients_list  = ingredients.map do | ingredient |
+		 	ingredient_data = get_ingredient_data(ingredient)
+		 	ingredient_data
+		 end
+		 puts "ingredients_list = "+ingredients_list.to_s
+		 instructions = parsedJson["Instructions"]
+		 nutritionInfo = parsedJson["NutritionInfo"]
+		 extraData = get_extraData(ingredients_list, instructions, nutritionInfo)
+		 puts "-----------------------------------------------------------------------------"
+		 puts "extraData = "+extraData.to_s
+		 create_card_object(title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , imageURL, extraData)
+
 	end
 
-	def Utils.create_card_object(title, subTitle1, subtitle2, imageURL)
+	def Utils.get_ingredient_data(ingredient)
+		{
+			name:ingredient["Name"],
+			quantity:ingredient["DisplayQuantity"],
+			unit:ingredient["Unit"]
+		}
+	end
+
+	def Utils.get_extraData(ingredients_list, instructions, nutritionInfo)
+		{
+			ingredients_list:ingredients_list,
+			instructions:instructions,
+			nutritionInfo:nutritionInfo
+		}
+	end
+
+	def Utils.create_card_object(title, subTitle1, subtitle2, imageURL, extraData)
         card_object = Card.new
         card_object.set_skillProcessTime 0.44
         card_object.set_cardSpeakOut title
         card_object.set_card_titles(title, subTitle1, subtitle2)
         card_object.set_imageUrl imageURL
+        card_object.set_extraData extraData
         return card_object
     end    
 end

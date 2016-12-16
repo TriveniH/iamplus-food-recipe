@@ -26,8 +26,7 @@ class JsonUtils
 
     def get_card_data
       cardToken = {stockId:"123"}
-      puts "cardData"
-      cardsData1 = cardList.map do |card|
+      cardsData1 = @cardList.map do |card|
       {name:"FirstCard",
         id:"333-333-333",
         cardToken:"{stockId:123}",
@@ -53,12 +52,21 @@ class JsonUtils
     end
 
     def generate_response_json
+      ingredient_list = []
+      instruction = ""
+      nutritionInfo = {}
+      extraData = {
+        ingredient_list:"ingredient_list",
+        instruction:"instruction",
+        nutritionInfo:"nutritionInfo"
+      }
 		result = {
         "intentToken": "this can be used as a field for global memory",
         "introSpeakOut": introSpeakOut,
         "autoListen": true,
         "autoExpandFirstCard": true,
-        "cardsData": get_card_data
+        "cardsData": get_card_data,
+        "extraData":extraData,
       }
       json = { 
           "format": @FORMAT,  
