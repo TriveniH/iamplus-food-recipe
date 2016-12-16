@@ -53,9 +53,8 @@ class RECIPE
 	end
 
 	def generate_response response
-		card_data_list = []
-		card_data = Utils.parse_recipeId_for_response response
-		card_data_list << card_data
+		card_data_list = Utils.parse_recipeId_for_response response
+
 		jsonUtils = JsonUtils.new
 		jsonUtils.set_introSpeakOut "Here is the recipe"
 		jsonUtils.set_status "SUCCESS"
