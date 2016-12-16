@@ -43,15 +43,16 @@ module Utils
 
 		instructions = parsedJson["Instructions"]
 		nutritionInfo = parsedJson["NutritionInfo"]
+		nutritionInfoString = get_nutritionInfo_data(nutritionInfo)
+	    #nutritionInfoCard = create_card_object("Nutrition Facts", "NutritionInfo", nil, nil, nutritionInfoString, imageURL, nil, nutritionInfoString)
+		 #cards << nutritionInfoCard
 
 		#generate first card
 		puts "-----------------------------------------------------------------------------"
-		cards << create_card_object(get_speakOut_for_firstCard(parsedJson), title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , nil, imageURL, nil, get_long_description_for_first_card(parsedJson))
+		cards << create_card_object(get_speakOut_for_firstCard(parsedJson), title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , nil, imageURL, nil, nutritionInfoString)
 		#add ingredients card.
 		cards << ingrdientCard
 
-		#parse nutrition info for firstcard
-		get_long_description_for_first_card(parsedJson) 
 		#generate instruction card
 		instructions_cards = generate_instruction_card(instructions, imageURL)
 		instructions_cards.each do | instructions_card|
@@ -129,4 +130,55 @@ module Utils
     	totalCalories  = nutritionInfo["TotalCalories"]
     	longDesc = "nutritionInfo: \n" + totalCalories.to_s + " calories for "+ serving.to_s
     end
+
+   def Utils.get_nutritionInfo_data(nutritionInfo)
+		nutritionInfo_final_string = ""
+		singularYieldUnit = nutritionInfo["SingularYieldUnit"]
+		totalCalories = nutritionInfo["TotalCalories"]
+		totalFat = nutritionInfo["TotalFat"]
+		caloriesFromFat = nutritionInfo["CaloriesFromFat"]
+		totalFatPct = nutritionInfo["TotalFatPct"]
+		satFat = nutritionInfo["SatFat"]
+		satFatPct = nutritionInfo["SatFatPct"]
+		monoFat = nutritionInfo["MonoFat"]
+		polyFat = nutritionInfo["PolyFat"]
+		transFat = nutritionInfo["TransFat"]
+		cholesterol = nutritionInfo["Cholesterol"]
+		cholesterolPct = nutritionInfo["CholesterolPct"]
+		sodium = nutritionInfo["Sodium"]
+		sodiumPct = nutritionInfo["SodiumPct"]
+		potassium = nutritionInfo["Potassium"]
+		potassiumPct = nutritionInfo["PotassiumPct"]
+		totalCarbs = nutritionInfo["TotalCarbs"]
+		totalCarbsPct = nutritionInfo["TotalCarbsPct"]
+		dietaryFiber = nutritionInfo["DietaryFiber"]
+		dietaryFiberPct = nutritionInfo["DietaryFiberPct"]
+		sugar = nutritionInfo["Sugar"]
+		protein = nutritionInfo["Protein"]
+		proteinPct = nutritionInfo["ProteinPct"]
+
+		nutritionInfo_final_string = "Nutrition Info: \n SingularYieldUnit :" +singularYieldUnit.to_s + "\n" +
+									"TotalCalories :" +totalCalories.to_s + "\n" +
+									"TotalFat :" +totalFat.to_s + "\n" +
+									"CaloriesFromFat :" +caloriesFromFat.to_s+ "\n" +
+									"TotalFatPct :" +totalFatPct.to_s + "\n" +
+									"SatFat :" +satFat.to_s + "\n" +
+									"SatFatPct :" +satFatPct.to_s + "\n" +
+									"MonoFat :" +monoFat.to_s + "\n" +
+									"PolyFat :" +polyFat.to_s + "\n" +
+									"TransFat :" +transFat.to_s + "\n" +
+									"Cholesterol :" +cholesterol.to_s + "\n" +
+									"CholesterolPct :" +cholesterolPct.to_s + "\n" +
+									"Sodium :" +sodium.to_s + "\n" +
+									"SodiumPct :" +sodiumPct.to_s + "\n" +
+									"Potassium :" +potassium.to_s + "\n" +
+									"PotassiumPct :" +potassiumPct.to_s + "\n" +
+									"TotalCarbs :" +totalCarbs.to_s + "\n" +
+									"TotalCarbsPct :" +totalCarbsPct.to_s + "\n" +
+									"DietaryFiber :" +dietaryFiber.to_s + "\n" +
+									"DietaryFiberPct :" +dietaryFiberPct.to_s + "\n" +
+									"Sugar :" +sugar.to_s + "\n" +
+									"Protein :" +protein.to_s + "\n" +
+									"ProteinPct :" +proteinPct.to_s
+	end
 end
