@@ -46,7 +46,7 @@ module Utils
 
 		#generate first card
 		puts "-----------------------------------------------------------------------------"
-		cards << create_card_object(get_speakOut_for_firstCard(parsedJson), title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , get_long_description_for_first_card(parsedJson), imageURL, nil, get_long_description_for_first_card(parsedJson))
+		cards << create_card_object(get_speakOut_for_firstCard(parsedJson), title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , nil, imageURL, nil, get_long_description_for_first_card(parsedJson))
 		#add ingredients card.
 		cards << ingrdientCard
 
@@ -113,7 +113,14 @@ module Utils
     	yieldUnit = parsedJson["YieldUnit"]
     	totalMinutes = parsedJson["TotalMinutes"]
     	title  = parsedJson["Title"]
-    	finalResponse = "#{title}, It will take around "+ totalMinutes.to_s + " minutes for "+ yieldNumber.to_s + " "+ yieldUnit.to_s 
+    	nutritionInfo = parsedJson["NutritionInfo"]
+    	serving  = nutritionInfo["SingularYieldUnit"]
+    	totalCalories  = nutritionInfo["TotalCalories"]
+    	longDesc = ". It is " + totalCalories.to_s + " calories for "+ serving.to_s
+
+    	finalResponse = "#{title} will take around "+ totalMinutes.to_s + " minutes for "+ yieldNumber.to_s + " "+ yieldUnit.to_s
+    	finalResponse = finalResponse + longDesc
+
 	end
 
     def Utils.get_long_description_for_first_card(parsedJson)
