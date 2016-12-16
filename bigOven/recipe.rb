@@ -56,7 +56,7 @@ class RECIPE
 		card_data_list = Utils.parse_recipeId_for_response response
 
 		jsonUtils = JsonUtils.new
-		jsonUtils.set_introSpeakOut "Here is the recipe"
+		jsonUtils.set_introSpeakOut "Here is what I found"
 		jsonUtils.set_status "SUCCESS"
 		jsonUtils.set_cardList card_data_list
 		jsonUtils.generate_response_json
@@ -100,4 +100,5 @@ class RECIPE
 		end
 		TITLE + recipeName + "&"	
 	end
+
 end

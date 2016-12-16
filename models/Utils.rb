@@ -36,27 +36,28 @@ module Utils
 		starRating = parsedJson["StarRating"]
 		imageURL = parsedJson["PhotoUrl"]
 
-		 ingredients = parsedJson["Ingredients"]
-		 ingradientString =  get_ingredient_data(ingredients)
+		ingredients = parsedJson["Ingredients"]
+		#get long description for the ingredients
+		ingradientString =  get_ingredient_data(ingredients)
+		ingrdientCard = create_card_object("This is all you need, "+ ingradientString, "Ingredients", nil, nil, ingradientString, imageURL, nil, ingradientString)
 
-		 ingrdientCard = create_card_object("This is all you need", "Ingredients", nil, nil, ingradientString, imageURL, nil, ingradientString)
-		 #puts "ingredients_list = "+ingredients_list.to_s
-		 
-		 instructions = parsedJson["Instructions"]
-		 nutritionInfo = parsedJson["NutritionInfo"]
-		 #extraData = get_extraData(ingredients_list, instructions, nutritionInfo)
-		 puts "-----------------------------------------------------------------------------"
-		 #puts "extraData = "+extraData.to_s
-		 cards << create_card_object(title, title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , "", imageURL, nil, nil)
+		instructions = parsedJson["Instructions"]
+		nutritionInfo = parsedJson["NutritionInfo"]
 
-		 cards << ingrdientCard
+		#generate first card
+		puts "-----------------------------------------------------------------------------"
+		cards << create_card_object(get_speakOut_for_firstCard(parsedJson), title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , get_long_description_for_first_card(parsedJson), imageURL, nil, get_long_description_for_first_card(parsedJson))
+		#add ingredients card.
+		cards << ingrdientCard
 
-		 #generate instruction card
-		 instructions_cards = generate_instruction_card(instructions, imageURL)
-		 instructions_cards.each do | instructions_card|
-		 	cards << instructions_card
-		 end
-		 cards
+		#parse nutrition info for firstcard
+		get_long_description_for_first_card(parsedJson) 
+		#generate instruction card
+		instructions_cards = generate_instruction_card(instructions, imageURL)
+		instructions_cards.each do | instructions_card|
+			cards << instructions_card
+		end
+		cards
 	end
 
 	def Utils.get_ingredient_data(ingredients)
@@ -105,5 +106,20 @@ module Utils
 			end
     	}
     	cards
+    end
+
+	def Utils.get_speakOut_for_firstCard(parsedJson)
+		yieldNumber = parsedJson["YieldNumber"]
+    	yieldUnit = parsedJson["YieldUnit"]
+    	totalMinutes = parsedJson["TotalMinutes"]
+    	title  = parsedJson["Title"]
+    	finalResponse = "#{title}, It will take around "+ totalMinutes.to_s + " minutes for "+ yieldNumber.to_s + " "+ yieldUnit.to_s 
+	end
+
+    def Utils.get_long_description_for_first_card(parsedJson)
+    	nutritionInfo = parsedJson["NutritionInfo"]
+    	serving  = nutritionInfo["SingularYieldUnit"]
+    	totalCalories  = nutritionInfo["TotalCalories"]
+    	longDesc = "nutritionInfo: \n" + totalCalories.to_s + " calories for "+ serving.to_s
     end
 end

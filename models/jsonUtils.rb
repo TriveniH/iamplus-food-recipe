@@ -66,14 +66,14 @@ class JsonUtils
         "autoListen": true,
         "autoExpandFirstCard": true,
         "autoRoll": true,
-        "autoRollCardsCount":7,
+        "autoRollCardsCount":2,
         "autoRollMinWaitInSeconds": 2,
-        "autoRollPauseSentence": "For the next cards please say next",
+        "autoRollPauseSentence": "please say next to move forward",
         "cardsData": get_card_data,
         "extraData":extraData,
       }
       json = { 
-          "format": @FORMAT,  
+          "format": @FORMAT,
           "formatVersion": @FORMAT_VERSION,
           "status": status ? "FAILED" : "SUCCESS",
           "result": result
