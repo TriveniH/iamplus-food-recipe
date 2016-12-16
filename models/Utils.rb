@@ -37,17 +37,19 @@ module Utils
 		imageURL = parsedJson["PhotoUrl"]
 
 		 ingredients = parsedJson["Ingredients"]
-		 ingredients_list  = ingredients.map do | ingredient |
-		 	ingredient_data = get_ingredient_data(ingredient)
-		 	ingredient_data
-		 end
-		 puts "ingredients_list = "+ingredients_list.to_s
+		 ingradientString =  get_ingredient_data(ingredients)
+
+		 ingrdientCard = create_card_object("This is all you need", "Ingredients", nil, nil, ingradientString, imageURL, nil, ingradientString)
+		 #puts "ingredients_list = "+ingredients_list.to_s
+		 
 		 instructions = parsedJson["Instructions"]
 		 nutritionInfo = parsedJson["NutritionInfo"]
-		 extraData = get_extraData(ingredients_list, instructions, nutritionInfo)
+		 #extraData = get_extraData(ingredients_list, instructions, nutritionInfo)
 		 puts "-----------------------------------------------------------------------------"
-		 puts "extraData = "+extraData.to_s
-		 cards << create_card_object(title, title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , "", imageURL, extraData, nil)
+		 #puts "extraData = "+extraData.to_s
+		 cards << create_card_object(title, title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , "", imageURL, nil, nil)
+
+		 cards << ingrdientCard
 
 		 #generate instruction card
 		 instructions_cards = generate_instruction_card(instructions, imageURL)
@@ -57,12 +59,14 @@ module Utils
 		 cards
 	end
 
-	def Utils.get_ingredient_data(ingredient)
-		{
-			name:ingredient["Name"],
-			quantity:ingredient["DisplayQuantity"],
-			unit:ingredient["Unit"]
-		}
+	def Utils.get_ingredient_data(ingredients)
+		ingredient_final_string = ""
+		ingredients_list  = ingredients.each do | ingredient |
+			ingradient = ingredient["Name"] + ", "+ ingredient["DisplayQuantity"] + " "+ingredient["Unit"]
+			ingredient_final_string = ingredient_final_string + ingradient + "\n"
+		end
+		puts ingredient_final_string
+		ingredient_final_string
 	end
 
 	def Utils.get_extraData(ingredients_list, instructions, nutritionInfo)
