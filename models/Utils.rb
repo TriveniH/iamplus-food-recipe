@@ -28,14 +28,13 @@ module Utils
 	end
 
 	def Utils.parse_recipeId_for_response(response)
-		#puts "response::"+ response.to_s
 		cards = []
 		parsedJson = JSON.parse(response)
 		resultCount = parsedJson["ResultCount"]
 		title = parsedJson["Title"]
 		cuisine = parsedJson["Cuisine"]
 		starRating = parsedJson["StarRating"]
-		imageURL = parsedJson["ImageURL"]
+		imageURL = parsedJson["PhotoUrl"]
 
 		 ingredients = parsedJson["Ingredients"]
 		 ingredients_list  = ingredients.map do | ingredient |
