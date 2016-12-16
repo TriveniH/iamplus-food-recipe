@@ -24,7 +24,6 @@ module Utils
 	      	end
 
 	      end
-	      process_instructions
 	      recipeId
 	end
 
@@ -37,7 +36,6 @@ module Utils
 		cuisine = parsedJson["Cuisine"]
 		starRating = parsedJson["StarRating"]
 		imageURL = parsedJson["ImageURL"]
-		
 
 		 ingredients = parsedJson["Ingredients"]
 		 ingredients_list  = ingredients.map do | ingredient |
@@ -50,7 +48,13 @@ module Utils
 		 extraData = get_extraData(ingredients_list, instructions, nutritionInfo)
 		 puts "-----------------------------------------------------------------------------"
 		 puts "extraData = "+extraData.to_s
-		 cards << create_card_object(title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , imageURL, extraData)
+		 cards << create_card_object(title, title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , "", imageURL, extraData, nil)
+
+		 #generate instruction card
+		 instructions_cards = generate_instruction_card(instructions, imageURL)
+		 instructions_cards.each do | instructions_card|
+		 	cards << instructions_card
+		 end
 		 cards
 	end
 
@@ -70,24 +74,26 @@ module Utils
 		}
 	end
 
-	def Utils.create_card_object(title, subTitle1, subtitle2, imageURL, extraData)
+	def Utils.create_card_object(cardSpeakOut, title, subTitle1, subtitle2, cardSpeakOutLong, imageURL, extraData, longDesc)
         card_object = Card.new
         card_object.set_skillProcessTime 0.44
-        card_object.set_cardSpeakOut title
+        card_object.set_speakOut(cardSpeakOut, cardSpeakOutLong, nil, nil)
         card_object.set_card_titles(title, subTitle1, subtitle2)
+        card_object.set_longDesc longDesc
         card_object.set_imageUrl imageURL
         card_object.set_extraData extraData
         return card_object
     end
 
-    def Utils.process_instructions
-    	instructions = "Line an 8- or 9-inch square pan with foil.  Lightly butter foil; set aside.  In a heavy saucepan, melt chips with sweetened condensed milk and salt.  Remove from heat.  Stir in vanilla and nuts.  Spread evenly into prepared pan.  Chill 2 hours or until firm.  Turn fudge onto cutting board.  Peel off foil and cut into squares.  Store covered in refrigerator."
-    	instructions.each_line{|s|
+    def Utils.generate_instruction_card(instructions, imageURL)
+    	cards = []
+    	instructions.each_line{ |s|
     		s = s.chop
     		if s.to_s.strip.length > 0
 				p s
-				#create_card_object(s, "", "", "http://redirect.bigoven.com/pics/rs/640/fudgy-dark-chocolate-beet-brow-c284ff.jpg")
+				cards << create_card_object("Here's how you make it", s, nil, nil, nil ,imageURL, nil, nil)
 			end
     	}
+    	cards
     end
 end

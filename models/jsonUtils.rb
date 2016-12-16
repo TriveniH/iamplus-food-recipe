@@ -30,10 +30,10 @@ class JsonUtils
       {name:"FirstCard",
         id:"333-333-333",
         cardToken:"{stockId:123}",
-        speakOut:card.cardSpeakOut,
-        speakOutLong:card.cardSpeakOut,
-        showSpeech:card.cardSpeakOut,
-        showSpeechLong:card.cardSpeakOut,
+        speakOut:card.speakOut,
+        speakOutLong:card.speakOutLong,
+        showSpeech:card.showSpeech,
+        showSpeechLong:card.showSpeechLong,
         imageUrl:card.imageUrl,
         backgroundImageUrl:card.imageUrl,
         webviewUrl:card.imageUrl,
@@ -44,7 +44,7 @@ class JsonUtils
         subtitle1:card.subTitle1,
         subtitle2:card.subTitle2,
         desc:card.cardTitle,
-        longDesc:card.cardTitle,
+        longDesc:card.longDesc,
         bgColor:"black",
         location:{ }
         }
