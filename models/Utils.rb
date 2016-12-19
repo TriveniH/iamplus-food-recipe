@@ -49,7 +49,7 @@ module Utils
 
 		#generate first card
 		puts "-----------------------------------------------------------------------------"
-		cards << create_card_object(get_speakOut_for_firstCard(parsedJson), title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , nil, imageURL, nil, nutritionInfoString)
+		cards << create_card_object(get_speakOut_for_firstCard(parsedJson), title, cuisine != nil ? "Cuisine: "+cuisine :cuisine , starRating != nil ? "StarRating: "+starRating.to_s : nil , nil, imageURL, nil, nil)
 		#add ingredients card.
 		cards << ingrdientCard
 
