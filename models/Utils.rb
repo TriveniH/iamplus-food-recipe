@@ -63,8 +63,20 @@ module Utils
 
 	def Utils.get_ingredient_data(ingredients)
 		ingredient_final_string = ""
+		puts "ingredients::::::::::::::::::::::::::"+ ingredients.to_s
 		ingredients_list  = ingredients.each do | ingredient |
-			ingradient = ingredient["Name"] + ", "+ ingredient["DisplayQuantity"] + " "+ingredient["Unit"]
+			puts "ingredient[Name]"+ ingredient["Name"].to_s
+			puts "ingredient[DisplayQuantity]"+ ingredient["DisplayQuantity"].to_s
+			puts "ingredient[Unit]"+ ingredient["Unit"].to_s
+			ingradient = ingredient["Name"]
+			quantity = ingredient["DisplayQuantity"]
+			unit = ingredient["Unit"]
+			if quantity != nil
+				ingradient = ingradient + ", "+ quantity
+			end
+			if unit != nil
+				ingradient = ingradient + " "+ unit
+			end
 			ingredient_final_string = ingredient_final_string + ingradient + "\n"
 		end
 		puts ingredient_final_string
