@@ -13,6 +13,10 @@ require './app/init'
 
 # Helpers
 require './spec/shared/helpers'
+require_all :spec
+
+
+ENV[ 'BIGOVEN_API_KEY' ]="4Sl6U9zF6XCXi5Y4zKQMbn7q0W2RLIR9"
 
 
 RSpec.configure do |config|
@@ -31,12 +35,7 @@ RSpec.configure do |config|
   ]
 
   config.before( :each ) do
-    yelp_url = 'http://api.yelp.com/v2/search?category_filter=sushi&limit=5&location=los%20angeles'
-
-    WebMock.stub_request(:get, yelp_url )
-      .to_return( status:200, body:yelp_response, headers:{} )
-
-    Redis.new.flushdb
+     Redis.new.flushdb
     Mongoid.purge!
   end
 end

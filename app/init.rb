@@ -11,6 +11,7 @@ require 'oauth'
 require 'httparty'
 require 'redis'
 require 'mongoid'
+require 'zipkin-tracer'
 
 
 # Helper
@@ -39,3 +40,11 @@ set :show_exceptions, false
 
 Mongoid.load!( 'config/mongoid.yml', ENV[ 'RACK_ENV' ])
 Mongo::Logger.logger.level = Logger::ERROR
+
+zipkin_config = { service_name:ENV[ 'NEW_RELIC_APP_NAME' ],
+                  service_port:settings.port,
+                  sampled_as_boolean:false,
+                  sample_rate: 1,
+                  json_api_host: ENV[ 'ZIPKIN_JSON_API_HOST' ]}
+
+use ZipkinTracer::RackHandler, zipkin_config

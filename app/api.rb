@@ -18,9 +18,13 @@ get '/' do
 end
 
 post '/recipe' do
-  
-  recipe = FoodRecipe.new(get_params)
-  response = recipe.get_data.to_json
+  response = nil
+  ZipkinTracer::TraceClient.local_component_span( "External API Call to #{ self }" ) do | ztc |
+    totalProcessTimeInMilli = Benchmark.ms do
+      recipe = FoodRecipe.new(get_params)
+      response = recipe.get_data.to_json
+    end
+  end
   return response
 
 end
@@ -30,8 +34,8 @@ def get_params
 	  entityFields = Hash.new
   	ps = @params[ :nlu_response ][ :mentions ].map do | h |
 
-=begin
-	entity = h[:entity]
+
+=begin	entity = h[:entity]
     	if entity != nil
           recipeName = entity[:recipe_name]
           if recipeName != nil

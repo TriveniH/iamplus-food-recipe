@@ -25,30 +25,34 @@ class RECIPE
 	def make_api_request_for_recipeId url
 		response_back = nil
 		recipeId = nil
-		api_request_time = Benchmark.realtime do
-			request = APIRequest.new( :generic, DOMAIN )
-			puts "url:::::"+ url.to_s
-			response = request.for( :get, url, '')
-			#response_back = JsonUtils.process_response_for_recipes(response.body)
-			puts "response = "+response.to_s
-			recipeId = Utils.get_highest_rated_recipes(response.body)
-			puts "recipeId === "+recipeId.to_s
+		ZipkinTracer::TraceClient.local_component_span( "External API Call to #{ self }" ) do | ztc |
+			api_request_time = Benchmark.realtime do
+				request = APIRequest.new( :generic, DOMAIN )
+			    puts "url:::::"+ url.to_s
+			    response = request.for( :get, url, '')
+			    #response_back = JsonUtils.process_response_for_recipes(response.body)
+			    puts "response = "+response.body.to_s
+			    recipeId = Utils.get_highest_rated_recipes(response.body)
+			    puts "recipeId === "+recipeId.to_s
+			end
+			puts "api_request_time for recipeId = "+api_request_time.to_s
 		end
-		puts "api_request_time for recipeId = "+api_request_time.to_s
 		recipeId
 	end
 
 	def make_api_request_for_detail_recipe url
 		response = nil
-		api_request_time = Benchmark.realtime do
-			request = APIRequest.new( :generic, DOMAIN )
-			puts "final url:::::"+ url.to_s
-			response = request.for( :get, url, '')
-			#response_back = JsonUtils.process_response_for_recipes(response.body)
-			puts "response = "+response.to_s
+		ZipkinTracer::TraceClient.local_component_span( "External API Call to #{ self }" ) do | ztc |
+			api_request_time = Benchmark.realtime do
+				request = APIRequest.new( :generic, DOMAIN )
+				puts "final url:::::"+ url.to_s
+				response = request.for( :get, url, '')
+				#response_back = JsonUtils.process_response_for_recipes(response.body)
+				puts "response = "+response.to_s
 
+			end
+			puts "api_request_time for detailed recipe = "+api_request_time.to_s
 		end
-		puts "api_request_time for detailed recipe = "+api_request_time.to_s
 		generate_response response.body		
 	end
 
