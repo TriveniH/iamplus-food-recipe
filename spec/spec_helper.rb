@@ -2,10 +2,13 @@ require 'rack'
 require 'rspec'
 require 'rack/test'
 require 'webmock/rspec'
+require 'simplecov'
 
 
 ENV[ 'RACK_ENV' ] = 'test'
 ENV[ 'OAUTH2_ACCESS_TOKEN' ] = 'OAUTH2_ACCESS_TOKEN'
+
+SimpleCov.start
 
  # App
 require './app/init'
